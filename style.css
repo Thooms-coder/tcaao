@@ -615,3 +615,38 @@ html, body {
 #footer * {
   pointer-events: auto !important;
 }
+
+/* ============================================================
+   UNIVERSAL PAN FIX — Safari horizontal scroll under overlays
+============================================================ */
+
+/* Tell Safari that horizontal scroll is allowed */
+#scroll-container,
+#panorama {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure fixed overlays don’t block horizontal gestures */
+#footer,
+#footer * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+#footer {
+  pointer-events: none !important; /* don’t block background */
+}
+#footer * {
+  pointer-events: auto !important; /* buttons clickable */
+}
+
+/* Let Safari actually delegate side swipes to scroll-container */
+body, html {
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y !important;
+  overflow: visible !important;
+}
