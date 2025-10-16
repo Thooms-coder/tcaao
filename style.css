@@ -1,55 +1,65 @@
 /* ============================================================
-   GLOBAL BASE (updated for Safari + Brave)
+   GLOBAL BASE
 ============================================================ */
 html, body {
   margin: 0;
   height: 100%;
   width: 100%;
   background: radial-gradient(circle at 50% 100%, rgba(255,0,150,0.05), #000 85%);
-  overflow: hidden;
+  overflow: hidden;                 /* scrolling happens in #scroll-container */
   scroll-behavior: smooth;
   font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: white;
+  color: #fff;
+}
+
+/* Ensure the visual viewport on mobile */
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    height: 100vh;
+    min-height: -webkit-fill-available;
+  }
 }
 
 /* ============================================================
-   PANORAMA SCROLL CONTAINER — universal touch + mouse support
+   PANORAMA SCROLL CONTAINER — touch + mouse
 ============================================================ */
 #scroll-container {
   position: relative;
   width: 100vw;
-  height: 100vh;
-  overflow: scroll; /* force both scrollbars for Safari */
-  -webkit-overflow-scrolling: touch; /* iOS kinetic scrolling */
+  height: 100dvh;                   /* modern viewport unit to avoid iOS bars */
+  overflow: auto;                   /* both directions when content overflows */
+  -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
   background: transparent;
   cursor: grab;
   will-change: scroll-position;
 }
 
-#panorama-wrapper, #panorama {
+#panorama-wrapper,
+#panorama {
   will-change: transform, width, height;
   transform: translateZ(0);
 }
+
 #panorama-wrapper {
   position: relative;
+  overflow: visible;                /* never clip the image */
   width: max-content;
   height: max-content;
 }
+
 #panorama {
   display: block;
   max-width: none;
   max-height: none;
   object-fit: contain;
   user-select: none;
-  pointer-events: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;             /* allow finger pan on the image itself */
   opacity: 0;
   transition: opacity 1.5s ease, transform 0.8s ease;
 }
-#panorama.active {
-  opacity: 1;
-  transform: scale(1);
-}
+#panorama.active { opacity: 1; transform: scale(1); }
 
 /* ============================================================
    LOADING MASK
@@ -57,103 +67,120 @@ html, body {
 #loading-mask {
   position: fixed;
   inset: 0;
-  background: black;
+  background: #000;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 3000;
   opacity: 1;
   transition: opacity 1s ease;
 }
 #loading-mask.fade-out { opacity: 0; pointer-events: none; }
+
 .spinner {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border: 3px solid rgba(255,255,255,0.2);
-  border-top-color: white;
+  border-top-color: #fff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { margin-top: 1rem; font-size: 0.9rem; opacity: 0.8; }
+.loading-text { margin-top: 1rem; font-size: .9rem; opacity: .8; }
 
 /* ============================================================
-   BEGIN EXPERIENCE
+   BEGIN EXPERIENCE (keep on top to avoid hijacks)
 ============================================================ */
 #start {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   padding: 1em 2em;
   background: linear-gradient(90deg, #00e6ff, #ff00aa);
-  color: black;
+  color: #000;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1.1rem;
   text-transform: uppercase;
-  z-index: 1000;
-  transition: opacity 0.6s ease, transform 0.35s ease;
+  z-index: 9999;                    /* higher than footer & links */
+  transition: opacity .6s ease, transform .35s ease;
 }
 #start:hover { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 30px rgba(255,0,170,0.4); }
 
 /* ============================================================
-   AUDIO CONTROLS
+   FOOTER (Links | Player | Joystick)
+   - Invisible until Begin
+   - No blur mask (per your request)
+   - Pass horizontal pan through, but keep buttons clickable
 ============================================================ */
-
 #footer {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
+  position: fixed;
+  left: 0; right: 0;
+  bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 5000;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .8rem;
+  padding: 0 1rem;
+  opacity: 0;                       /* hidden initially */
+  pointer-events: none;             /* allow panning underneath */
+  transform: translateZ(0);
+  transition: opacity .6s ease;
+  background: transparent;          /* removed blur mask */
+  backdrop-filter: none;
+  border-top: none;
 }
 #footer.visible {
   opacity: 1;
-  pointer-events: auto;
+  /* keep pointer-events on container NONE so horizontal pan passes through;
+     we re-enable events only on interactive children below */
 }
 
+/* Make children clickable while parent stays pan-transparent */
+#footer * {
+  pointer-events: auto;
+  touch-action: manipulation;       /* taps/clicks only; no pan capture */
+}
+
+/* Group layouts */
+#footer-left { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+#footer-right { display: flex; align-items: flex-end; justify-content: center; flex: 1; }
+
+/* ============================================================
+   AUDIO CONTROLS
+============================================================ */
 #controls {
   display: flex;
   gap: 1rem;
   background: rgba(255,255,255,0.08);
   border-radius: 50px;
-  padding: 0.8rem 1.4rem;
-  backdrop-filter: blur(12px) saturate(150%);
+  padding: .8rem 1.4rem;
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 #controls button {
-  width: 46px;
-  height: 46px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   background: rgba(255,255,255,0.12);
   border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s ease;
 }
-#controls button:hover {
-  background: linear-gradient(90deg, rgba(0,230,255,0.4), rgba(255,0,170,0.4));
-  transform: scale(1.08);
-}
-#controls svg { width: 22px; height: 22px; fill: white; }
+#controls button:hover { background: linear-gradient(90deg, rgba(0,230,255,0.4), rgba(255,0,170,0.4)); transform: scale(1.08); }
+#controls svg { width: 22px; height: 22px; fill: #fff; }
 
 /* ============================================================
    PROGRESS BAR — Gradient Glow + Smooth Animation
 ============================================================ */
 #progress-bar,
 #progress-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
-  border-radius: 40px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 10px 16px; border-radius: 40px;
   background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px) saturate(160%);
   border: 2px solid rgba(0,200,255,0.4);
   box-shadow:
     0 0 20px rgba(0,200,255,0.25),
@@ -166,60 +193,43 @@ html, body {
   50%     { box-shadow: 0 0 28px rgba(0,220,255,0.45), 0 0 36px rgba(255,0,170,0.35); }
 }
 #progress-svg { width: 200px; height: 10px; }
-#progress-line {
-  stroke-width: 4;
-  stroke: url(#progressGradient);
-  filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));
-  transition: stroke-dashoffset 0.25s linear;
-}
-#progress-pointer { r: 6; fill: #fff; transition: cx 0.2s linear; pointer-events: none; }
-#time-display { font-size: 12px; color: #fff; font-family: monospace; letter-spacing: 0.5px; opacity: 0.85; }
+#progress-line { stroke-width: 4; stroke: url(#progressGradient); filter: drop-shadow(0 0 8px rgba(0,255,255,0.5)); transition: stroke-dashoffset .25s linear; }
+#progress-pointer { r: 6; fill: #fff; transition: cx .2s linear; pointer-events: none; }
+#time-display { font-size: 12px; color: #fff; font-family: monospace; letter-spacing: .5px; opacity: .85; }
 
-/* ============================================================
-   PROGRESS GRADIENT DEFINITION
-============================================================ */
+/* gradient ids come from your inline SVG */
 svg defs #progressGradient stop:first-child { stop-color: #00e6ff; }
 svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 
 /* ============================================================
    GLOWING THEMED BUTTONS
 ============================================================ */
-#footer-left {
-  display: flex;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
 #footer-left button {
   font-family: "Cormorant Garamond", serif;
   font-size: 1.05rem;
-  letter-spacing: 0.06em;
-  padding: 0.9em 1.6em;
+  letter-spacing: .06em;
+  padding: .9em 1.6em;
   border-radius: 2rem;
   border: 2px solid rgba(255,255,255,0.25);
   background: rgba(255,255,255,0.06);
-  color: white;
-  backdrop-filter: blur(14px) saturate(160%);
-  transition: transform 0.25s ease, box-shadow 0.4s ease, background 0.3s ease;
+  color: #fff;
+  transition: transform .25s ease, box-shadow .4s ease, background .3s ease;
 }
-#footer-left button:hover {
-  transform: scale(1.05);
-  border-color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.12);
-}
-#buy-btn { border-color: rgba(0,220,255,0.5); animation: glowCyan 4s ease-in-out infinite alternate; }
+#footer-left button:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.12); }
+
+#buy-btn        { border-color: rgba(0,220,255,0.5); animation: glowCyan 4s ease-in-out infinite alternate; }
 #soundcloud-btn { border-color: rgba(255,150,0,0.5); animation: glowOrange 4s ease-in-out infinite alternate; }
-#lyrics-btn { border-color: rgba(200,170,255,0.5); animation: glowViolet 4s ease-in-out infinite alternate; }
+#lyrics-btn     { border-color: rgba(200,170,255,0.5); animation: glowViolet 4s ease-in-out infinite alternate; }
+
 @keyframes glowCyan   { 0%,100% { box-shadow: 0 0 12px rgba(0,220,255,0.25); } 50% { box-shadow: 0 0 22px rgba(0,240,255,0.55); } }
 @keyframes glowOrange { 0%,100% { box-shadow: 0 0 12px rgba(255,140,0,0.25); } 50% { box-shadow: 0 0 22px rgba(255,170,0,0.55); } }
 @keyframes glowViolet { 0%,100% { box-shadow: 0 0 12px rgba(190,160,255,0.25); } 50% { box-shadow: 0 0 22px rgba(210,180,255,0.55); } }
 
 /* ============================================================
-   JOYSTICK GRID (Unified Glow Theme)
+   JOYSTICK GRID
 ============================================================ */
-#footer-right { display: flex; align-items: flex-end; justify-content: center; flex: 1; }
 #joystick { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
-.zoom-controls { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+.zoom-controls { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
 .arrow-controls {
   display: grid;
   grid-template-columns: repeat(3, 56px);
@@ -229,26 +239,16 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   gap: 6px;
 }
 .joy-btn {
-  width: 56px;
-  height: 56px;
+  width: 56px; height: 56px;
   border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.3);
   background: rgba(0,0,0,0.45);
-  color: white;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-  transition: all 0.25s ease;
+  color: #fff; font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s ease;
   box-shadow: 0 0 10px rgba(0,255,255,0.15);
 }
-.joy-btn:hover {
-  background: linear-gradient(90deg, rgba(0,230,255,0.3), rgba(255,0,170,0.3));
-  border-color: rgba(255,255,255,0.6);
-  transform: scale(1.1);
-  box-shadow: 0 0 16px rgba(0,230,255,0.4), 0 0 20px rgba(190,160,255,0.25);
-}
+.joy-btn:hover { background: linear-gradient(90deg, rgba(0,230,255,0.3), rgba(255,0,170,0.3)); border-color: rgba(255,255,255,0.6); transform: scale(1.1); box-shadow: 0 0 16px rgba(0,230,255,0.4), 0 0 20px rgba(190,160,255,0.25); }
 #arrow-up    { grid-column: 2; grid-row: 1; }
 #arrow-left  { grid-column: 1; grid-row: 2; }
 #arrow-right { grid-column: 3; grid-row: 2; }
@@ -258,454 +258,63 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
    LYRICS MODAL
 ============================================================ */
 #lyrics-modal {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: rgba(0,0,0,0.92);
   backdrop-filter: blur(12px);
   overflow-y: auto;
-  z-index: 2000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
+  z-index: 6000;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s ease;
 }
 #lyrics-modal.active { opacity: 1; pointer-events: auto; }
-#lyrics-gallery {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 100px 0 60px;
-  gap: 2rem;
-}
+
+#lyrics-gallery { display: flex; flex-direction: column; align-items: center; padding: 100px 0 60px; gap: 2rem; }
 #lyrics-gallery img {
   max-width: 90%;
   border-radius: 12px;
   box-shadow: 0 0 30px rgba(255,255,255,0.1);
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 0.6s ease forwards;
+  opacity: 0; transform: translateY(30px);
+  animation: fadeUp .6s ease forwards;
 }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
 #close-lyrics {
-  position: sticky;
-  top: 24px;
-  right: 32px;
-  align-self: flex-end;
-  font-size: 2.8rem;
-  color: white;
+  position: sticky; top: 24px; right: 32px; align-self: flex-end;
+  font-size: 2.8rem; color: #fff;
   background: rgba(255,255,255,0.1);
   border: 2px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  width: 52px; height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(255,255,255,0.4);
-  backdrop-filter: blur(10px);
-  transition: all 0.25s ease;
+  border-radius: 50%; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.4);
+  transition: all .25s ease;
 }
 #close-lyrics:hover { background: linear-gradient(90deg, rgba(0,230,255,0.4), rgba(255,0,170,0.4)); }
 
 /* ============================================================
-   FOOTER VISIBILITY + FIXED LAYERING
-============================================================ */
-#footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5000; /* ensure above panorama */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0 1rem;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateZ(0);
-  transition: opacity 0.6s ease;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  border-top: none !important;
-}
-
-#footer.visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* ============================================================
-   SAFARI EXCEPTION — Hide footer until Begin pressed
-============================================================ */
-@supports (-webkit-touch-callout: none) {
-  #footer {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #footer.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-
-/* ============================================================
-   MOBILE RESPONSIVENESS (preserve buttons)
+   RESPONSIVE TUNING
 ============================================================ */
 @media (max-width: 768px) {
   #footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
-    gap: 0.6rem;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
+    gap: .6rem;
+    padding: .5rem;
   }
-
-  #footer-left,
-  #player-cluster,
-  #footer-right {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
+  #footer-left, #player-cluster, #footer-right {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
   }
-
-  #controls button {
-    width: 42px;
-    height: 42px;
-  }
-
-  #footer-left button {
-    font-size: 0.9rem;
-    padding: 0.5em 1.2em;
-    margin: 0.2rem;
-  }
-
-  #joystick .joy-btn {
-    width: 42px;
-    height: 42px;
-    font-size: 1rem;
-  }
+  #controls button { width: 42px; height: 42px; }
+  #footer-left button { font-size: .9rem; padding: .5em 1.2em; margin: .2rem; }
+  #joystick .joy-btn { width: 42px; height: 42px; font-size: 1rem; }
 }
 
-/* ============================================================
-   FINAL CROSS-BROWSER PATCH
-============================================================ */
-
-/* Allow Safari to scroll and pan */
-@supports (-webkit-touch-callout: none) {
-  html, body {
-    overflow: visible !important;
-  }
-  #scroll-container {
-    overflow: scroll !important;
-    -webkit-overflow-scrolling: touch !important;
-    touch-action: pan-x pan-y !important;
-  }
-}
-
-/* Reinforce footer visibility and stacking */
-#footer.visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  z-index: 5000 !important;
-}
-
-/* ============================================================
-   BRAVE / CHROME MOBILE FIX — force footer inside safe viewport
-============================================================ */
-
-/* Recalculate the usable viewport and prevent clipping */
-@supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
-  html, body {
-    height: 100vh;
-    min-height: -webkit-fill-available;
-    overflow: visible !important;
-  }
-
-  #scroll-container {
-    height: 100vh;
-    overflow: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  /* Footer anchored safely inside visible area */
-  #footer {
-    position: fixed !important;
-    bottom: env(safe-area-inset-bottom, 0px);
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 5000 !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transform: translateZ(0);
-  }
-
-  /* Ensure all control clusters are visible and centered */
-  #footer-left,
-  #player-cluster,
-  #footer-right {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-  }
-}
-
-/* ---- Fix 1: Make sure player controls show even if ".hidden" is defined somewhere ---- */
-#player-cluster.hidden {
-  display: flex !important;     /* show the middle controls cluster */
-}
-
-/* Keep using .hidden for the lyrics modal only */
-#lyrics-modal.hidden {
-  display: none !important;
-}
-
-/* ---- Fix 2: Let Safari start the pan gesture on the image itself ---- */
-@media (pointer: coarse) {
-  #panorama {
-    pointer-events: auto !important;   /* allow finger to “grab” and scroll */
-    touch-action: pan-x pan-y !important;
-  }
-}
-
-/* ---- Brave/Chrome mobile bottom clipping guard (safe area + layering) ---- */
-#footer {
-  position: fixed !important;
-  bottom: env(safe-area-inset-bottom, 0px) !important;
-  left: 0; right: 0;
-  z-index: 5000 !important;
-  transform: translateZ(0);
-}
-
-/* Ensure all clusters are visible and wrap on narrow widths */
-#footer-left,
-#player-cluster,
-#footer-right {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-}
-
-/* ============================================================
-   FINAL MOBILE CROSS-BROWSER PATCH
-   (Safari drag, Brave visibility, Chrome/Firefox consistency)
-============================================================ */
-
-/* --- Allow touch-drag panning on Safari iOS --- */
-#scroll-container,
-#panorama {
-  touch-action: pan-x pan-y !important;
-  -webkit-overflow-scrolling: touch !important;
-  pointer-events: auto !important;
-}
-
-/* --- Fix for Brave/Chrome mobile bottom clipping --- */
-@supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
-  html, body {
-    height: 100vh !important;
-    min-height: -webkit-fill-available !important;
-    overflow: visible !important;
-  }
-
-  #scroll-container {
-    position: relative !important;
-    height: 100vh !important;
-    overflow: auto !important;
-  }
-
-  #footer {
-    position: fixed !important;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
-    left: 0; right: 0;
-    width: 100%;
-    z-index: 5000 !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transform: translateZ(0);
-  }
-
-  #footer-left,
-  #player-cluster,
-  #footer-right {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-  }
-}
-
-/* --- Ensure hidden class never hides player controls --- */
-#player-cluster.hidden {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* ============================================================
-   FINAL VISIBILITY FIX — Footer hidden until Begin Experience
-============================================================ */
-#footer {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.8s ease;
-}
-
-#footer.visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* ============================================================
-   UNIVERSAL MOBILE HORIZONTAL SCROLL FIX
-   (Safari, Chrome, Brave, Firefox)
-============================================================ */
-
-/* 1. Allow the root to pass scroll gestures */
-html, body {
-  overflow: visible !important;
-  overscroll-behavior: contain;
-}
-
-/* 2. Scroll container must explicitly handle both directions */
-#scroll-container {
-  overflow: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  touch-action: pan-x pan-y !important;
-  cursor: grab;
-}
-
-/* 3. The image must accept touch input to drag horizontally */
-#panorama {
-  pointer-events: auto !important;
-  touch-action: pan-x pan-y !important;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* 4. Remove any accidental overflow clipping on parent wrappers */
-#panorama-wrapper {
-  overflow: visible !important;
-  width: max-content !important;
-  height: max-content !important;
-}
-
-/* ============================================================
-   TOUCH PASS-THROUGH FIX — Allow panning behind footer
-============================================================ */
-
-/* Make the footer ignore touch gestures except on buttons */
-#footer {
-  pointer-events: none !important;
-  background: transparent !important; /* optional if you removed blur mask */
-}
-
-/* Restore interactivity only for actual controls/buttons */
-#footer * {
-  pointer-events: auto !important;
-}
-
-/* ============================================================
-   UNIVERSAL PAN FIX — Safari horizontal scroll under overlays
-============================================================ */
-
-/* Tell Safari that horizontal scroll is allowed */
-#scroll-container,
-#panorama {
-  touch-action: pan-x pan-y !important;
-  -webkit-overflow-scrolling: touch !important;
-  overflow: auto !important;
-  pointer-events: auto !important;
-}
-
-/* Ensure fixed overlays don’t block horizontal gestures */
-#footer,
-#footer * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  touch-action: none;
-}
-
-#footer {
-  pointer-events: none !important; /* don’t block background */
-}
-#footer * {
-  pointer-events: auto !important; /* buttons clickable */
-}
-
-/* Let Safari actually delegate side swipes to scroll-container */
-body, html {
-  overscroll-behavior: contain;
-  touch-action: pan-x pan-y !important;
-  overflow: visible !important;
-}
-
-/* ============================================================
-   FINAL VIEWPORT + FOOTER VISIBILITY FIX
-   (Brave mobile + Landscape cutoff)
-============================================================ */
-
-/* Ensure the usable area matches the visual viewport */
-html, body {
-  height: 100vh !important;
-  min-height: -webkit-fill-available !important;
-  overflow: visible !important;
-  overscroll-behavior: contain !important;
-}
-
-/* Footer: always stay inside safe viewport and wrap neatly */
-#footer {
-  position: fixed !important;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 4px) !important;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 5000 !important;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.6rem;
-  max-height: 45vh; /* prevents overflow off-screen */
-  box-sizing: border-box;
-  overflow: visible !important;
-}
-
-/* Make sure all control clusters wrap instead of clipping */
-#footer-left,
-#player-cluster,
-#footer-right {
-  flex: 1 1 100%;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-width: 0; /* allow flex shrink */
-}
-
-/* Buttons shrink gracefully in narrow or landscape layouts */
-#footer-left button,
-#controls button,
-.joy-btn {
-  flex: 0 1 auto;
-  min-width: 42px;
-  max-width: 32vw;
-  margin: 4px;
-}
-
-/* In landscape, center all groups and prevent cutoff */
+/* Landscape: center groups & avoid cutoff */
 @media (orientation: landscape) {
   #footer {
     flex-direction: row;
@@ -713,113 +322,29 @@ html, body {
     justify-content: center;
     align-items: center;
     padding-bottom: env(safe-area-inset-bottom, 0px);
+    max-height: 70dvh;             /* if lots of buttons, allow internal scroll */
+    overflow-y: auto;
   }
-  #footer-left, #footer-right, #player-cluster {
-    flex: 1 1 auto;
-    justify-content: center;
-  }
-}
-
-/* Keep the footer touch-transparent except for buttons */
-#footer { pointer-events: none !important; }
-#footer * { pointer-events: auto !important; }
-
-/* Reinforce horizontal panning */
-#scroll-container, #panorama {
-  touch-action: pan-x pan-y !important;
-  -webkit-overflow-scrolling: touch !important;
-  overflow: auto !important;
-}
-/* ============================================================
-   FINAL FOOTER HEIGHT + SAFE-AREA PATCH
-============================================================ */
-
-#footer {
-  position: fixed !important;
-  bottom: env(safe-area-inset-bottom, 0px) !important;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 5000 !important;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-
-  overflow-y: auto !important;      /* scroll internally if absolutely needed */
-  max-height: 80dvh !important;     /* plenty of vertical room for all buttons */
-  min-height: 40dvh !important;     /* keeps layout consistent on tall phones */
-
-  padding: 0.8rem;
-  gap: 0.6rem;
-  box-sizing: border-box;
-
-  backdrop-filter: blur(10px);
-  background: rgba(0,0,0,0.28);
-  border-top: 1px solid rgba(255,255,255,0.15);
-
-  pointer-events: none !important;
-}
-#footer * {
-  pointer-events: auto !important;
-}
-
-/* Landscape: reduce padding, still full-height safe */
-@media (orientation: landscape) {
-  #footer {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    max-height: 70dvh !important;
-    padding-bottom: calc(env(safe-area-inset-bottom,0px) + 0.4rem);
-  }
-}
-
-/* Ensure scroll region (panorama) still scrolls horizontally */
-#scroll-container,
-#panorama {
-  touch-action: pan-x pan-y !important;
-  -webkit-overflow-scrolling: touch !important;
-  overflow: auto !important;
+  #footer-left, #footer-right, #player-cluster { flex: 1 1 auto; justify-content: center; }
 }
 
 /* ============================================================
-   PLAYER VISIBILITY FIX — Prevent progress bar and controls cutoff
+   PLAYER VISIBILITY (no clipping)
 ============================================================ */
-
-/* Ensure footer never clips internal content */
-#footer {
-  overflow: visible !important;
-  max-height: 100dvh !important;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem) !important;
-}
-
-/* Make player cluster fully visible and centered */
 #player-cluster {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-  padding-bottom: 0.8rem !important; /* extra breathing room */
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  width: 100%; margin: 0 auto;
+  padding-bottom: .8rem;
+}
+#progress-block, #progress-bar { transform: translateY(0); margin-bottom: .6rem; }
+
+/* ============================================================
+   SAFARI / CHROMIUM SAFE-AREA + PAN REINFORCEMENT
+============================================================ */
+#scroll-container, #panorama {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Force progress bar inside player cluster to render fully */
-#progress-block, #progress-bar {
-  transform: translateY(0) !important;
-  margin-bottom: 0.6rem !important;
-}
-
-/* Landscape tweak: keep everything centered vertically */
-@media (orientation: landscape) {
-  #player-cluster {
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem) !important;
-  }
-}
+/* Ensure taps don’t get hijacked by footer when hidden */
+#footer:not(.visible) * { pointer-events: none; }
