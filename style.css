@@ -335,50 +335,81 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 }
 
 /* ============================================================
-   MOBILE PATCH: Fix Footer Visibility and Panorama Drag
+   FINAL MOBILE FIX — Footer Visibility + Panorama Interaction
 ============================================================ */
 @media (max-width: 768px) {
 
-  /* Ensure panorama fills view properly */
+  /* Allow dragging the panorama again */
   #scroll-container {
-    overflow: scroll;
-    touch-action: pan-x pan-y;
+    overflow: auto !important;
+    touch-action: pan-x pan-y !important;
   }
 
-  /* Re-stack footer items vertically and ensure all show */
+  /* Reset the footer from desktop grid to flex-column */
   #footer {
-    position: fixed;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
+    position: fixed !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    bottom: 0 !important;
+    left: 0;
+    right: 0;
+    padding: 0.6rem 0.4rem !important;
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    z-index: 1003;
     gap: 0.6rem;
-    width: 100%;
-    bottom: 10px;
-    padding: 0.4rem;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
+  /* Make all footer sections visible and stacked */
   #footer-left,
   #player-cluster,
   #footer-right {
-    flex: unset;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 auto;
   }
 
-  /* Scale down controls for smaller screens */
-  #controls button { width: 40px; height: 40px; }
-  #controls svg { width: 18px; height: 18px; }
-  #footer-left button { font-size: 0.9rem; padding: 0.6em 1.2em; }
-  #joystick .joy-btn { width: 40px; height: 40px; font-size: 1rem; }
+  /* Shrink button sizes for small screens */
+  #controls button {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  #controls svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
 
-  /* Prevent overflow off screen */
-  #lyrics-gallery img {
-    max-width: 95%;
+  /* Scale Bandcamp/SoundCloud/Lyrics buttons */
+  #footer-left button {
+    font-size: 0.9rem !important;
+    padding: 0.5em 1.2em !important;
+    margin: 0.2rem;
+  }
+
+  /* Shrink joystick controls */
+  #joystick .joy-btn {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 1rem !important;
+  }
+
+  /* Ensure progress bar fits on screen */
+  #progress-svg {
+    width: 160px !important;
+  }
+  #time-display {
+    font-size: 10px !important;
+  }
+
+  /* Avoid overlapping other content */
+  #panorama {
+    pointer-events: auto !important;
   }
 }
-
