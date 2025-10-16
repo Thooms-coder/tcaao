@@ -36,6 +36,8 @@ function hideLoadingMask() {
   if (!loadingMask.classList.contains("fade-out")) {
     loadingMask.classList.add("fade-out");
     panorama.classList.add("active");
+    // ✅ FIX: also remove the mask fully after fade
+    setTimeout(() => loadingMask.remove(), 1200);
   }
 }
 
@@ -65,6 +67,7 @@ startBtn.addEventListener("click", () => {
   setTimeout(() => startBtn.remove(), 1500);
   panorama.classList.add("active");
 
+  // ✅ FIX: show footer only AFTER experience starts
   setTimeout(() => footer?.classList.add("visible"), 1000);
 
   [buyBtn, scBtn, lyricsBtn].forEach((btn, i) => {
@@ -81,12 +84,6 @@ startBtn.addEventListener("click", () => {
       player.play().catch(() => {});
   });
 
-  // Reveal footer controls when Begin Experience is pressed
-  const footer = document.getElementById("footer");
-  if (footer) {
-    footer.classList.add("visible");
-  }
-  
   document.body.style.cursor = "grab";
 });
 
@@ -363,13 +360,4 @@ window.addEventListener("orientationchange", fitAndCenterPanorama);
 ============================================================ */
 document.querySelectorAll("button").forEach(btn => {
   ["touchend","mouseup"].forEach(evt => btn.addEventListener(evt, () => btn.blur()));
-});
-
-// ===== FADE OUT LOADING MASK =====
-window.addEventListener("load", () => {
-  const mask = document.getElementById("loading-mask");
-  if (mask) {
-    mask.classList.add("fade-out");
-    setTimeout(() => mask.remove(), 1200); // remove completely after fade
-  }
 });
