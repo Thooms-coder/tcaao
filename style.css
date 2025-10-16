@@ -5,7 +5,9 @@ html, body {
   margin: 0;
   height: 100%;
   background: radial-gradient(circle at 50% 100%, rgba(255,0,150,0.05), #000 85%);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;          /* allows fixed elements to render on Brave */
+  -webkit-overflow-scrolling: touch;  /* smooth scrolling on iOS */
   scroll-behavior: smooth;
   font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color: white;
@@ -18,11 +20,12 @@ html, body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   cursor: grab;
   background: transparent;
   will-change: scroll-position;
 }
+
 #panorama-wrapper, #panorama {
   will-change: transform, width, height;
   transform: translateZ(0);
@@ -357,6 +360,7 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
     left: 0;
     right: 0;
     padding: 0.6rem 0.4rem !important;
+    padding-bottom: env(safe-area-inset-bottom);
     background: rgba(0,0,0,0.25);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255,255,255,0.15);
@@ -457,4 +461,19 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 #footer.visible {
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+/* ============================================================
+   BRAVE / CHROME MOBILE VISIBILITY FIX
+============================================================ */
+#footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 1003 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateZ(0);   /* force new layer to bypass clipping */
+  will-change: opacity, transform;
 }
