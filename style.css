@@ -413,3 +413,34 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
     pointer-events: auto !important;
   }
 }
+
+/* ============================================================
+   SAFARI SAFE-AREA / OVERLAY FIX
+============================================================ */
+@supports (-webkit-touch-callout: none) {
+  html, body {
+    background-color: #000 !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Remove iOS Safari's automatic translucent layer */
+  #footer {
+    background: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Prevent any unwanted overlay behind controls */
+  #controls,
+  #progress-block,
+  #footer-left button,
+  #joystick .joy-btn {
+    background-color: rgba(0,0,0,0.6) !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Ensure full view height without gray fade at bottom */
+  body {
+    min-height: -webkit-fill-available;
+  }
+}
