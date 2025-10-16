@@ -405,3 +405,41 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
     display: none;
   }
 }
+
+/* ============================================================
+   BRAVE VIEWPORT HEIGHT + FOOTER FIX
+   Uses JS-injected --vh variable for accurate height
+============================================================ */
+body.brave-fix #scroll-container {
+  height: calc(var(--vh, 1vh) * 100) !important;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+body.brave-fix #footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0; right: 0;
+  width: 100%;
+  z-index: 5000 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateZ(0);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.8rem);
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body.brave-fix #footer-left,
+body.brave-fix #player-cluster,
+body.brave-fix #footer-right {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
