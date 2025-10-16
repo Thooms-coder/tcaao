@@ -600,3 +600,18 @@ html, body {
   width: max-content !important;
   height: max-content !important;
 }
+
+/* ============================================================
+   TOUCH PASS-THROUGH FIX — Allow panning behind footer
+============================================================ */
+
+/* Make the footer ignore touch gestures except on buttons */
+#footer {
+  pointer-events: none !important;
+  background: transparent !important; /* optional if you removed blur mask */
+}
+
+/* Restore interactivity only for actual controls/buttons */
+#footer * {
+  pointer-events: auto !important;
+}
