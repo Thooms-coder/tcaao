@@ -217,13 +217,13 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 }
 #footer-left button:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.12); }
 
-#buy-btn        { border-color: rgba(0,220,255,0.5); animation: glowCyan 4s ease-in-out infinite alternate; }
-#soundcloud-btn { border-color: rgba(255,150,0,0.5); animation: glowOrange 4s ease-in-out infinite alternate; }
-#lyrics-btn     { border-color: rgba(200,170,255,0.5); animation: glowViolet 4s ease-in-out infinite alternate; }
+#buy-btn        { border-color: rgba(0,220,255,0.5); animation: glowCyan 1s ease-in-out infinite alternate; }
+#soundcloud-btn { border-color: rgba(255,150,0,0.5); animation: glowOrange 1s ease-in-out infinite alternate; }
+#lyrics-btn     { border-color: rgba(200,170,255,0.5); animation: glowViolet 1s ease-in-out infinite alternate; }
 
-@keyframes glowCyan   { 0%,100% { box-shadow: 0 0 12px rgba(0,220,255,0.25); } 50% { box-shadow: 0 0 22px rgba(0,240,255,0.55); } }
-@keyframes glowOrange { 0%,100% { box-shadow: 0 0 12px rgba(255,140,0,0.25); } 50% { box-shadow: 0 0 22px rgba(255,170,0,0.55); } }
-@keyframes glowViolet { 0%,100% { box-shadow: 0 0 12px rgba(190,160,255,0.25); } 50% { box-shadow: 0 0 22px rgba(210,180,255,0.55); } }
+@keyframes glowCyan   { 0%,100% { box-shadow: 0 0 12px rgba(0,220,255,0.25); } 80% { box-shadow: 0 0 22px rgba(0,240,255,0.55); } }
+@keyframes glowOrange { 0%,100% { box-shadow: 0 0 12px rgba(255,140,0,0.25); } 80% { box-shadow: 0 0 22px rgba(255,170,0,0.55); } }
+@keyframes glowViolet { 0%,100% { box-shadow: 0 0 12px rgba(190,160,255,0.25); } 80% { box-shadow: 0 0 22px rgba(210,180,255,0.55); } }
 
 /* ============================================================
    JOYSTICK GRID
