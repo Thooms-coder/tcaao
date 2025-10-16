@@ -485,3 +485,59 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   align-items: center !important;
   width: 100% !important;
 }
+
+/* ============================================================
+   FINAL MOBILE CROSS-BROWSER PATCH
+   (Safari drag, Brave visibility, Chrome/Firefox consistency)
+============================================================ */
+
+/* --- Allow touch-drag panning on Safari iOS --- */
+#scroll-container,
+#panorama {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  pointer-events: auto !important;
+}
+
+/* --- Fix for Brave/Chrome mobile bottom clipping --- */
+@supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
+  html, body {
+    height: 100vh !important;
+    min-height: -webkit-fill-available !important;
+    overflow: visible !important;
+  }
+
+  #scroll-container {
+    position: relative !important;
+    height: 100vh !important;
+    overflow: auto !important;
+  }
+
+  #footer {
+    position: fixed !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+    left: 0; right: 0;
+    width: 100%;
+    z-index: 5000 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateZ(0);
+  }
+
+  #footer-left,
+  #player-cluster,
+  #footer-right {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+}
+
+/* --- Ensure hidden class never hides player controls --- */
+#player-cluster.hidden {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
