@@ -5,7 +5,7 @@ html, body {
   margin: 0;
   height: 100%;
   background: radial-gradient(circle at 50% 100%, rgba(255,0,150,0.05), #000 85%);
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;          /* allows fixed elements to render on Brave */
   -webkit-overflow-scrolling: touch;  /* smooth scrolling on iOS */
   scroll-behavior: smooth;
