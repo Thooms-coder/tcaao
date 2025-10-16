@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Preload key assets -->
+  <link rel="preload" as="image" href="./assets/panorama.webp">
+  <link rel="preload" as="audio" href="./assets/ep_full.mp3">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Children Are Always Ours — Visual Experience</title>
+
+  <!-- Favicon + Apple Touch -->
+  <link rel="icon" type="image/png" href="./assets/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="./assets/favicon.png" />
+
+  <!-- Meta for SEO and social preview -->
+  <meta name="description" content="An immersive panorama and sound journey by Mutsa Mungoshi." />
+  <meta property="og:title" content="The Children Are Always Ours — Visual Experience" />
+  <meta property="og:description" content="An immersive panorama and sound journey by Mutsa Mungoshi." />
+  <meta property="og:image" content="./assets/preview.jpg" />
+  <meta property="og:image:alt" content="Panoramic artwork from The Children Are Always Ours visual experience." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tcaao.space" />
+
+  <!-- Twitter cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Children Are Always Ours — Visual Experience" />
+  <meta name="twitter:description" content="An immersive panorama and sound journey by Mutsa Mungoshi." />
+  <meta name="twitter:image" content="./assets/preview.jpg" />
+
+  <!-- PWA & mobile appearance -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <!-- ============================================================
+       LOADING MASK
+  ============================================================ -->
+  <div id="loading-mask">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="loading-text">Loading Experience...</p>
+  </div>
+
+  <!-- ============================================================
+       AUDIO PLAYER (Looped)
+  ============================================================ -->
+  <audio id="player" preload="metadata" loop playsinline>
+    <source src="./assets/ep_full.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- ============================================================
+       PANORAMA
+  ============================================================ -->
+  <div id="scroll-container">
+    <div id="panorama-wrapper">
+      <img id="panorama" src="./assets/panorama.webp" alt="Panoramic artwork: The Children Are Always Ours" />
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BEGIN EXPERIENCE BUTTON
+  ============================================================ -->
+  <button id="start" aria-label="Begin immersive experience">Begin Experience</button>
+
+  <!-- ============================================================
+       UNIFIED FOOTER CLUSTERS
+  ============================================================ -->
+  <footer id="footer">
+    <!-- Left cluster (External Links) -->
+    <div id="footer-left">
+      <a href="https://mutsa.bandcamp.com/album/the-children-are-always-ours-ep" target="_blank" rel="noopener noreferrer">
+        <button id="buy-btn" aria-label="Open Bandcamp">BANDCAMP</button>
+      </a>
+      <a href="https://soundcloud.com/mutsa13/sets/the-children-are-always-ours" target="_blank" rel="noopener noreferrer">
+        <button id="soundcloud-btn" aria-label="Open SoundCloud">SOUNDCLOUD</button>
+      </a>
+      <button id="lyrics-btn" aria-label="Open lyrics">LYRICS</button>
+    </div>
+
+    <!-- Center cluster (Player controls + progress) -->
+    <div id="player-cluster" class="hidden">
+      <div id="player-block">
+        <div id="controls" aria-label="Playback controls">
+          <button id="rewind" class="control-btn" title="Rewind 10s">
+            <svg viewBox="0 0 24 24"><polygon points="11,12 22,4 22,20"/><polygon points="2,12 13,4 13,20"/></svg>
+          </button>
+          <button id="playpause" class="control-btn" title="Play / Pause">
+            <svg id="play-icon" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+          </button>
+          <button id="forward" class="control-btn" title="Forward 10s">
+            <svg viewBox="0 0 24 24"><polygon points="2,4 13,12 2,20"/><polygon points="11,4 22,12 11,20"/></svg>
+          </button>
+        </div>
+    
+        <div id="progress-block">
+          <svg id="progress-svg" viewBox="0 0 200 6" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="3" x2="200" y2="3" stroke="rgba(255,255,255,0.15)" stroke-width="4" stroke-linecap="round"/>
+            <line id="progress-line" x1="0" y1="3" x2="200" y2="3"
+                  stroke="url(#progressGradient)" stroke-width="4" stroke-linecap="round"/>
+            <circle id="progress-pointer" cx="0" cy="3" r="6" fill="white" filter="url(#glowFilter)" />
+            <defs>
+              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00e6ff">
+                  <animate attributeName="offset" values="0;1;0" dur="6s" repeatCount="indefinite"/>
+                </stop>
+                <stop offset="100%" stop-color="#ff00aa">
+                  <animate attributeName="offset" values="1;0;1" dur="6s" repeatCount="indefinite"/>
+                </stop>
+              </linearGradient>
+              <filter id="glowFilter">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+          </svg>
+          <div id="time-display">
+            <span id="elapsed">0:00</span> / <span id="duration">0:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right cluster (Joystick controls) -->
+    <div id="footer-right">
+      <div id="joystick">
+        <div class="zoom-controls">
+          <button id="zoom-in" class="zoom-btn" aria-label="Zoom In">＋</button>
+          <button id="zoom-out" class="zoom-btn" aria-label="Zoom Out">－</button>
+        </div>
+
+        <div class="arrow-controls">
+          <button id="arrow-up" class="joy-btn" aria-label="Pan Up">▲</button>
+          <button id="arrow-left" class="joy-btn" aria-label="Pan Left">◀</button>
+          <button id="arrow-right" class="joy-btn" aria-label="Pan Right">▶</button>
+          <button id="arrow-down" class="joy-btn" aria-label="Pan Down">▼</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       LYRICS MODAL (Full-screen overlay with 8 lyric pages)
+  ============================================================ -->
+  <div id="lyrics-modal" class="hidden" aria-hidden="true">
+    <div id="lyrics-gallery">
+      <!-- Close button -->
+      <button id="close-lyrics" aria-label="Close lyrics">×</button>
+
+      <!-- Lyric Pages -->
+      <img src="./assets/lyrics/page1.webp" alt="Lyrics — Track 1" loading="lazy" />
+      <img src="./assets/lyrics/page2.webp" alt="Lyrics — Track 2" loading="lazy" />
+      <img src="./assets/lyrics/page3.webp" alt="Lyrics — Track 3" loading="lazy" />
+      <img src="./assets/lyrics/page4.webp" alt="Lyrics — Track 4" loading="lazy" />
+      <img src="./assets/lyrics/page5.webp" alt="Lyrics — Track 5" loading="lazy" />
+      <img src="./assets/lyrics/page6.webp" alt="Lyrics — Track 6" loading="lazy" />
+      <img src="./assets/lyrics/page7.webp" alt="Lyrics — Track 7" loading="lazy" />
+      <img src="./assets/lyrics/page8.webp" alt="Lyrics — Track 8" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCRIPT
+  ============================================================ -->
+  <script src="./script.js" defer></script>
+</body>
+</html>
