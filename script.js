@@ -81,6 +81,12 @@ startBtn.addEventListener("click", () => {
       player.play().catch(() => {});
   });
 
+  // Reveal footer controls when Begin Experience is pressed
+  const footer = document.getElementById("footer");
+  if (footer) {
+    footer.classList.add("visible");
+  }
+  
   document.body.style.cursor = "grab";
 });
 
@@ -359,3 +365,11 @@ document.querySelectorAll("button").forEach(btn => {
   ["touchend","mouseup"].forEach(evt => btn.addEventListener(evt, () => btn.blur()));
 });
 
+// ===== FADE OUT LOADING MASK =====
+window.addEventListener("load", () => {
+  const mask = document.getElementById("loading-mask");
+  if (mask) {
+    mask.classList.add("fade-out");
+    setTimeout(() => mask.remove(), 1200); // remove completely after fade
+  }
+});

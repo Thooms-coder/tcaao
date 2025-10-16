@@ -102,6 +102,17 @@ html, body {
 /* ============================================================
    AUDIO CONTROLS
 ============================================================ */
+
+#footer {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+#footer.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 #controls {
   display: flex;
   gap: 1rem;
@@ -541,3 +552,4 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   visibility: visible !important;
   opacity: 1 !important;
 }
+
