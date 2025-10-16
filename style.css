@@ -785,3 +785,41 @@ html, body {
   -webkit-overflow-scrolling: touch !important;
   overflow: auto !important;
 }
+
+/* ============================================================
+   PLAYER VISIBILITY FIX — Prevent progress bar and controls cutoff
+============================================================ */
+
+/* Ensure footer never clips internal content */
+#footer {
+  overflow: visible !important;
+  max-height: 100dvh !important;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem) !important;
+}
+
+/* Make player cluster fully visible and centered */
+#player-cluster {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding-bottom: 0.8rem !important; /* extra breathing room */
+}
+
+/* Force progress bar inside player cluster to render fully */
+#progress-block, #progress-bar {
+  transform: translateY(0) !important;
+  margin-bottom: 0.6rem !important;
+}
+
+/* Landscape tweak: keep everything centered vertically */
+@media (orientation: landscape) {
+  #player-cluster {
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem) !important;
+  }
+}
