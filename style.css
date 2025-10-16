@@ -650,3 +650,83 @@ body, html {
   touch-action: pan-x pan-y !important;
   overflow: visible !important;
 }
+
+/* ============================================================
+   FINAL VIEWPORT + FOOTER VISIBILITY FIX
+   (Brave mobile + Landscape cutoff)
+============================================================ */
+
+/* Ensure the usable area matches the visual viewport */
+html, body {
+  height: 100vh !important;
+  min-height: -webkit-fill-available !important;
+  overflow: visible !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Footer: always stay inside safe viewport and wrap neatly */
+#footer {
+  position: fixed !important;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 4px) !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 5000 !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  max-height: 45vh; /* prevents overflow off-screen */
+  box-sizing: border-box;
+  overflow: visible !important;
+}
+
+/* Make sure all control clusters wrap instead of clipping */
+#footer-left,
+#player-cluster,
+#footer-right {
+  flex: 1 1 100%;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-width: 0; /* allow flex shrink */
+}
+
+/* Buttons shrink gracefully in narrow or landscape layouts */
+#footer-left button,
+#controls button,
+.joy-btn {
+  flex: 0 1 auto;
+  min-width: 42px;
+  max-width: 32vw;
+  margin: 4px;
+}
+
+/* In landscape, center all groups and prevent cutoff */
+@media (orientation: landscape) {
+  #footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #footer-left, #footer-right, #player-cluster {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* Keep the footer touch-transparent except for buttons */
+#footer { pointer-events: none !important; }
+#footer * { pointer-events: auto !important; }
+
+/* Reinforce horizontal panning */
+#scroll-container, #panorama {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow: auto !important;
+}
