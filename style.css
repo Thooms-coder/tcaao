@@ -404,3 +404,46 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   pointer-events: auto !important;
   z-index: 5000 !important;
 }
+
+/* ============================================================
+   BRAVE / CHROME MOBILE FIX — force footer inside safe viewport
+============================================================ */
+
+/* Recalculate the usable viewport and prevent clipping */
+@supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
+  html, body {
+    height: 100vh;
+    min-height: -webkit-fill-available;
+    overflow: visible !important;
+  }
+
+  #scroll-container {
+    height: 100vh;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Footer anchored safely inside visible area */
+  #footer {
+    position: fixed !important;
+    bottom: env(safe-area-inset-bottom, 0px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 5000 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateZ(0);
+  }
+
+  /* Ensure all control clusters are visible and centered */
+  #footer-left,
+  #player-cluster,
+  #footer-right {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+}
