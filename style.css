@@ -334,3 +334,51 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   #joystick .joy-btn { width: 44px; height: 44px; }
 }
 
+/* ============================================================
+   MOBILE PATCH: Fix Footer Visibility and Panorama Drag
+============================================================ */
+@media (max-width: 768px) {
+
+  /* Ensure panorama fills view properly */
+  #scroll-container {
+    overflow: scroll;
+    touch-action: pan-x pan-y;
+  }
+
+  /* Re-stack footer items vertically and ensure all show */
+  #footer {
+    position: fixed;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    bottom: 10px;
+    padding: 0.4rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  #footer-left,
+  #player-cluster,
+  #footer-right {
+    flex: unset;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Scale down controls for smaller screens */
+  #controls button { width: 40px; height: 40px; }
+  #controls svg { width: 18px; height: 18px; }
+  #footer-left button { font-size: 0.9rem; padding: 0.6em 1.2em; }
+  #joystick .joy-btn { width: 40px; height: 40px; font-size: 1rem; }
+
+  /* Prevent overflow off screen */
+  #lyrics-gallery img {
+    max-width: 95%;
+  }
+}
+
