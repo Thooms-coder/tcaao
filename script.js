@@ -64,7 +64,7 @@ startBtn.addEventListener("click", () => {
   player.play().then(() => setTimeout(() => (player.muted = false), 500)).catch(() => {});
 
   startBtn.style.opacity = 0;
-  setTimeout(() => startBtn.remove(), 1500);
+  setTimeout(() => footer?.classList.add("visible"), 1000);
   panorama.classList.add("active");
 
   // ✅ FIX: show footer only AFTER experience starts
