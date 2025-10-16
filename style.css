@@ -477,3 +477,18 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   transform: translateZ(0);   /* force new layer to bypass clipping */
   will-change: opacity, transform;
 }
+
+/* ============================================================
+   SAFARI PRELOAD FIX — Hide footer until "Begin Experience"
+============================================================ */
+@supports (-webkit-touch-callout: none) {
+  #footer {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  #footer.visible {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition: opacity 1s ease;
+  }
+}
