@@ -167,24 +167,6 @@
   <!-- ============================================================
        SCRIPT
   ============================================================ -->
-  <script src="./script.js" defer></script>
-  <script>
-    /* --- Detect Brave browser and fix viewport offset for footer --- */
-    (async () => {
-      const isBrave = navigator.brave && await navigator.brave.isBrave();
-      if (isBrave) {
-        document.body.classList.add("brave-fix");
-    
-        // Force recalculation of usable viewport height
-        const fixFooterHeight = () => {
-          const vh = window.innerHeight * 0.01;
-          document.documentElement.style.setProperty('--vh', `${vh}px`);
-        };
-    
-        fixFooterHeight();
-        window.addEventListener('resize', fixFooterHeight);
-      }
-    })();
-  </script>    
+  <script src="./script.js" defer></script>   
 </body>
 </html>
