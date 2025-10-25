@@ -202,7 +202,7 @@ svg defs #progressGradient stop:first-child { stop-color: #00e6ff; }
 svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 
 /* ============================================================
-   GLOWING THEMED BUTTONS
+   INDIVIDUAL BUTTON CLARITY + BREATHING GLOW
 ============================================================ */
 #footer-left button {
   font-family: "Cormorant Garamond", serif;
@@ -210,20 +210,95 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   letter-spacing: .06em;
   padding: .9em 1.6em;
   border-radius: 2rem;
-  border: 2px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.14);
   color: #fff;
-  transition: transform .25s ease, box-shadow .4s ease, background .3s ease;
+  text-shadow: 0 0 6px rgba(0,0,0,0.8);
+  box-shadow:
+    inset 0 0 6px rgba(255,255,255,0.08),
+    0 0 10px rgba(255,255,255,0.12);
+  transition: all 0.25s ease;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
-#footer-left button:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.12); }
 
-#buy-btn        { border-color: rgba(0,220,255,0.5); animation: glowCyan 1s ease-in-out infinite alternate; }
-#soundcloud-btn { border-color: rgba(255,150,0,0.5); animation: glowOrange 1s ease-in-out infinite alternate; }
-#lyrics-btn     { border-color: rgba(200,170,255,0.5); animation: glowViolet 1s ease-in-out infinite alternate; }
+#footer-left button:hover {
+  transform: scale(1.07);
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.8);
+  box-shadow:
+    0 0 20px currentColor,
+    0 0 40px rgba(255,255,255,0.3),
+    inset 0 0 8px rgba(255,255,255,0.25);
+}
 
-@keyframes glowCyan   { 0%,100% { box-shadow: 0 0 12px rgba(0,220,255,0.25); } 80% { box-shadow: 0 0 22px rgba(0,240,255,0.55); } }
-@keyframes glowOrange { 0%,100% { box-shadow: 0 0 12px rgba(255,140,0,0.25); } 80% { box-shadow: 0 0 22px rgba(255,170,0,0.55); } }
-@keyframes glowViolet { 0%,100% { box-shadow: 0 0 12px rgba(190,160,255,0.25); } 80% { box-shadow: 0 0 22px rgba(210,180,255,0.55); } }
+/* ============================================================
+   COLOR-SPECIFIC GLOW PULSES
+============================================================ */
+#buy-btn {
+  border-color: rgba(0,220,255,0.9);
+  animation-name: breatheCyan;
+}
+#soundcloud-btn {
+  border-color: rgba(255,150,0,0.9);
+  animation-name: breatheOrange;
+}
+#youtube-btn {
+  border-color: rgba(255,0,0,0.9);
+  animation-name: breatheRed;
+}
+#lyrics-btn {
+  border-color: rgba(190,160,255,0.9);
+  animation-name: breatheViolet;
+}
+
+/* ============================================================
+   KEYFRAMES — SLOW PULSING GLOW
+============================================================ */
+@keyframes breatheCyan {
+  0%,100% {
+    box-shadow: 0 0 10px rgba(0,220,255,0.3),
+                0 0 20px rgba(0,220,255,0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0,240,255,0.6),
+                0 0 40px rgba(0,240,255,0.4);
+  }
+}
+
+@keyframes breatheOrange {
+  0%,100% {
+    box-shadow: 0 0 10px rgba(255,150,0,0.3),
+                0 0 20px rgba(255,150,0,0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255,170,0,0.6),
+                0 0 40px rgba(255,170,0,0.4);
+  }
+}
+
+@keyframes breatheRed {
+  0%,100% {
+    box-shadow: 0 0 10px rgba(255,0,0,0.35),
+                0 0 20px rgba(255,0,0,0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255,60,60,0.7),
+                0 0 40px rgba(255,0,0,0.45);
+  }
+}
+
+@keyframes breatheViolet {
+  0%,100% {
+    box-shadow: 0 0 10px rgba(190,160,255,0.3),
+                0 0 20px rgba(190,160,255,0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(210,180,255,0.7),
+                0 0 40px rgba(210,180,255,0.45);
+  }
+}
 
 /* ============================================================
    JOYSTICK GRID
