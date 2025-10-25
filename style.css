@@ -255,6 +255,22 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   color: #ffd9a8;
   animation-name: breatheOrange;
 }
+#spotify-btn {
+  border-color: #1DB954;                /* official Spotify green */
+  color: #9fffb8;
+  animation-name: breatheGreen;
+  box-shadow:
+    0 0 24px rgba(29,185,84,0.75),
+    0 0 48px rgba(29,185,84,0.45);
+}
+#spotify-btn:hover {
+  background: rgba(29,185,84,0.25);
+  border-color: rgba(29,185,84,1);
+  box-shadow:
+    0 0 50px rgba(29,185,84,0.9),
+    0 0 90px rgba(29,185,84,0.6),
+    inset 0 0 12px rgba(255,255,255,0.25);
+}
 #youtube-btn {
   border-color: rgba(255,0,40,1);          /* slightly warmer red tone */
   color: #ffcccc;
@@ -337,6 +353,18 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   }
 }
 
+@keyframes breatheGreen {
+  0%,100% {
+    box-shadow:
+      0 0 20px rgba(29,185,84,0.6),
+      0 0 40px rgba(29,185,84,0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(29,185,84,0.9),
+      0 0 80px rgba(29,185,84,0.6);
+  }
+}
 /* ============================================================
    RESPONSIVE BUTTON ADJUSTMENTS
 ============================================================ */
