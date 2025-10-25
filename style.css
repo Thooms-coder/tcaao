@@ -256,9 +256,23 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
   animation-name: breatheOrange;
 }
 #youtube-btn {
-  border-color: rgba(255,0,0,1);
-  color: #ffb3b3;
+  border-color: rgba(255,0,40,1);          /* slightly warmer red tone */
+  color: #ffcccc;
   animation-name: breatheRed;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  box-shadow:
+    0 0 24px rgba(255,0,0,0.75),           /* stronger inner halo */
+    0 0 48px rgba(255,50,50,0.5);          /* wide soft outer glow */
+}
+#youtube-btn:hover {
+  background: rgba(255,0,0,0.25);
+  border-color: rgba(255,70,70,1);
+  box-shadow:
+    0 0 50px rgba(255,70,70,0.9),
+    0 0 90px rgba(255,30,30,0.6),
+    inset 0 0 12px rgba(255,255,255,0.25);
 }
 #lyrics-btn {
   border-color: rgba(190,160,255,1);
@@ -298,13 +312,15 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 @keyframes breatheRed {
   0%,100% {
     box-shadow:
-      0 0 20px rgba(255,0,0,0.6),
-      0 0 40px rgba(255,0,0,0.4);
+      0 0 30px rgba(255,0,40,0.8),          /* stronger inner pulse */
+      0 0 60px rgba(255,50,50,0.45),
+      0 0 120px rgba(255,20,20,0.3);        /* subtle ambient halo */
   }
   50% {
     box-shadow:
-      0 0 40px rgba(255,60,60,0.9),
-      0 0 80px rgba(255,0,0,0.6);
+      0 0 60px rgba(255,70,70,1),
+      0 0 120px rgba(255,30,30,0.75),
+      0 0 200px rgba(255,0,0,0.55);
   }
 }
 
