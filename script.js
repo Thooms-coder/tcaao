@@ -20,7 +20,10 @@ const container     = $("scroll-container");
 const wrapper       = $("panorama-wrapper");
 const panorama      = $("panorama");
 const buyBtn        = $("buy-btn");
+const spotifyBtn    = $("spotify-btn");
+const youtubeBtn    = $("youtube-btn");
 const scBtn         = $("soundcloud-btn");
+const appleBtn      = $("applemusic-btn");
 const lyricsBtn     = $("lyrics-btn");
 const lyricsModal   = $("lyrics-modal");
 const closeLyrics   = $("close-lyrics");
@@ -64,20 +67,19 @@ startBtn.addEventListener("click", () => {
   player.play().then(() => setTimeout(() => (player.muted = false), 500)).catch(() => {});
 
   startBtn.style.opacity = 0;
-  setTimeout(() => footer?.classList.add("visible"), 1000);
   panorama.classList.add("active");
 
   // ✅ FIX: show footer only AFTER experience starts
   setTimeout(() => footer?.classList.add("visible"), 1000);
 
-  [buyBtn, scBtn, lyricsBtn].forEach((btn, i) => {
+  [buyBtn, scBtn, spotifyBtn, appleBtn, youtubeBtn, lyricsBtn].forEach((btn, i) => {
     if (!btn) return;
     btn.style.opacity = 0;
     setTimeout(() => {
       btn.style.transition = "opacity 0.8s ease";
       btn.style.opacity = 1;
     }, 1300 + i * 300);
-  });
+  });  
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && !player.paused)

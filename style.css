@@ -271,6 +271,24 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
     0 0 90px rgba(29,185,84,0.6),
     inset 0 0 12px rgba(255,255,255,0.25);
 }
+
+#applemusic-btn {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #ffcaff;
+  animation-name: breathePink;
+  box-shadow:
+    0 0 24px rgba(255, 120, 200, 0.65),
+    0 0 48px rgba(255, 120, 200, 0.35);
+}
+#applemusic-btn:hover {
+  background: rgba(255, 120, 200, 0.25);
+  border-color: rgba(255, 120, 200, 1);
+  box-shadow:
+    0 0 50px rgba(255, 120, 200, 0.9),
+    0 0 90px rgba(255, 120, 200, 0.6),
+    inset 0 0 12px rgba(255,255,255,0.25);
+}
+
 #youtube-btn {
   border-color: rgba(255,0,40,1);          /* slightly warmer red tone */
   color: #ffcccc;
@@ -337,6 +355,19 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
       0 0 60px rgba(255,70,70,1),
       0 0 120px rgba(255,30,30,0.75),
       0 0 200px rgba(255,0,0,0.55);
+  }
+}
+
+@keyframes breathePink {
+  0%,100% {
+    box-shadow:
+      0 0 20px rgba(255, 120, 200, 0.6),
+      0 0 40px rgba(255, 120, 200, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(255, 160, 220, 0.9),
+      0 0 80px rgba(255, 160, 220, 0.6);
   }
 }
 
