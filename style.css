@@ -308,10 +308,23 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
     0 0 90px rgba(255,30,30,0.6),
     inset 0 0 12px rgba(255,255,255,0.25);
 }
-#lyrics-btn {
-  border-color: rgba(190,160,255,1);
-  color: #e2d4ff;
-  animation-name: breatheViolet;
+
+#genius-btn {
+  border-color: #fdee00;            /* Genius yellow */
+  color: #fff9b0;
+  animation-name: breatheYellow;
+  box-shadow:
+    0 0 24px rgba(253,238,0,0.75),
+    0 0 48px rgba(253,238,0,0.45);
+}
+
+#genius-btn:hover {
+  background: rgba(253,238,0,0.25);
+  border-color: rgba(253,238,0,1);
+  box-shadow:
+    0 0 50px rgba(253,238,0,0.9),
+    0 0 90px rgba(253,238,0,0.6),
+    inset 0 0 12px rgba(255,255,255,0.25);
 }
 
 /* ============================================================
@@ -396,6 +409,20 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
       0 0 80px rgba(29,185,84,0.6);
   }
 }
+
+@keyframes breatheYellow {
+  0%,100% {
+    box-shadow:
+      0 0 20px rgba(253,238,0,0.6),
+      0 0 40px rgba(253,238,0,0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(253,238,0,0.9),
+      0 0 80px rgba(253,238,0,0.6);
+  }
+}
+
 /* ============================================================
    RESPONSIVE BUTTON ADJUSTMENTS
 ============================================================ */
@@ -435,42 +462,6 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 #arrow-left  { grid-column: 1; grid-row: 2; }
 #arrow-right { grid-column: 3; grid-row: 2; }
 #arrow-down  { grid-column: 2; grid-row: 3; }
-
-/* ============================================================
-   LYRICS MODAL
-============================================================ */
-#lyrics-modal {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.92);
-  backdrop-filter: blur(12px);
-  overflow-y: auto;
-  z-index: 6000;
-  opacity: 0; pointer-events: none;
-  transition: opacity .4s ease;
-}
-#lyrics-modal.active { opacity: 1; pointer-events: auto; }
-
-#lyrics-gallery { display: flex; flex-direction: column; align-items: center; padding: 100px 0 60px; gap: 2rem; }
-#lyrics-gallery img {
-  max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(255,255,255,0.1);
-  opacity: 0; transform: translateY(30px);
-  animation: fadeUp .6s ease forwards;
-}
-@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-#close-lyrics {
-  position: sticky; top: 24px; right: 32px; align-self: flex-end;
-  font-size: 2.8rem; color: #fff;
-  background: rgba(255,255,255,0.1);
-  border: 2px solid rgba(255,255,255,0.25);
-  border-radius: 50%; width: 52px; height: 52px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; box-shadow: 0 0 15px rgba(255,255,255,0.4);
-  transition: all .25s ease;
-}
-#close-lyrics:hover { background: linear-gradient(90deg, rgba(0,230,255,0.4), rgba(255,0,170,0.4)); }
 
 /* ============================================================
    RESPONSIVE TUNING

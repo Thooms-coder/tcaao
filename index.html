@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<<head>
+<head>
   <!-- Preload key assets -->
   <link rel="preload" as="image" href="https://tcaao.space/assets/panorama.webp">
   <link rel="preload" as="audio" href="https://tcaao.space/assets/ep_full.mp3">
@@ -99,7 +99,9 @@
       <a href="https://www.youtube.com/watch?v=MaWNzk2g3Jg&list=OLAK5uy_ni0hadGOMScBxvC89943WQ46-gfjnHnFI" target="_blank" rel="noopener noreferrer">
         <button id="youtube-btn" aria-label="Open YouTube">YOUTUBE</button>
       </a>
-      <button id="lyrics-btn" aria-label="Open lyrics">LYRICS</button>
+      <a href="https://genius.com/albums/Mutsa/The-children-are-always-ours-ep" target="_blank" rel="noopener noreferrer">
+        <button id="genius-btn" aria-label="Open Genius">GENIUS</button>
+      </a>      
     </div>
 
     <!-- Center cluster (Player controls + progress) -->
@@ -162,26 +164,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- ============================================================
-       LYRICS MODAL (Full-screen overlay with 8 lyric pages)
-  ============================================================ -->
-  <div id="lyrics-modal" class="hidden" aria-hidden="true">
-    <div id="lyrics-gallery">
-      <!-- Close button -->
-      <button id="close-lyrics" aria-label="Close lyrics">×</button>
-
-      <!-- Lyric Pages -->
-      <img src="./assets/lyrics/page1.webp" alt="Lyrics — Track 1" loading="lazy" />
-      <img src="./assets/lyrics/page2.webp" alt="Lyrics — Track 2" loading="lazy" />
-      <img src="./assets/lyrics/page3.webp" alt="Lyrics — Track 3" loading="lazy" />
-      <img src="./assets/lyrics/page4.webp" alt="Lyrics — Track 4" loading="lazy" />
-      <img src="./assets/lyrics/page5.webp" alt="Lyrics — Track 5" loading="lazy" />
-      <img src="./assets/lyrics/page6.webp" alt="Lyrics — Track 6" loading="lazy" />
-      <img src="./assets/lyrics/page7.webp" alt="Lyrics — Track 7" loading="lazy" />
-      <img src="./assets/lyrics/page8.webp" alt="Lyrics — Track 8" loading="lazy" />
-    </div>
-  </div>
 
   <!-- ============================================================
        SCRIPT

@@ -10,7 +10,6 @@ const rewind        = $("rewind");
 const playpause     = $("playpause");
 const playIcon      = $("play-icon");
 const forward       = $("forward");
-const progressBar   = $("progress-bar");
 const progressSVG   = $("progress-svg");
 const progressLine  = $("progress-line");
 const progressPointer = $("progress-pointer");
@@ -24,9 +23,7 @@ const spotifyBtn    = $("spotify-btn");
 const youtubeBtn    = $("youtube-btn");
 const scBtn         = $("soundcloud-btn");
 const appleBtn      = $("applemusic-btn");
-const lyricsBtn     = $("lyrics-btn");
-const lyricsModal   = $("lyrics-modal");
-const closeLyrics   = $("close-lyrics");
+const geniusBtn     = $("genius-btn");
 const zoomInBtn     = $("zoom-in");
 const zoomOutBtn    = $("zoom-out");
 const loadingMask   = $("loading-mask");
@@ -72,7 +69,7 @@ startBtn.addEventListener("click", () => {
   // ✅ FIX: show footer only AFTER experience starts
   setTimeout(() => footer?.classList.add("visible"), 1000);
 
-  [buyBtn, scBtn, spotifyBtn, appleBtn, youtubeBtn, lyricsBtn].forEach((btn, i) => {
+  [buyBtn, scBtn, spotifyBtn, appleBtn, youtubeBtn, geniusBtn].forEach((btn, i) => {
     if (!btn) return;
     btn.style.opacity = 0;
     setTimeout(() => {
@@ -181,24 +178,6 @@ const scrubLoop = () => {
     }
   })
 );
-
-/* ============================================================
-   LYRICS MODAL
-============================================================ */
-if (lyricsBtn && lyricsModal && closeLyrics) {
-  const close = () => {
-    lyricsModal.classList.remove("active");
-    setTimeout(() => lyricsModal.classList.add("hidden"), 300);
-    document.body.style.overflow = "";
-  };
-  lyricsBtn.addEventListener("click", () => {
-    lyricsModal.classList.remove("hidden");
-    setTimeout(() => lyricsModal.classList.add("active"), 10);
-    document.body.style.overflow = "hidden";
-  });
-  closeLyrics.addEventListener("click", close);
-  document.addEventListener("keydown", e => e.key === "Escape" && lyricsModal.classList.contains("active") && close());
-}
 
 /* ============================================================
    PANORAMA SIZING + ZOOM
