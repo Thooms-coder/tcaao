@@ -27,10 +27,9 @@ html, body {
 #scroll-container {
   position: relative;
   width: 100vw;
-  height: 100dvh;                   /* modern viewport unit to avoid iOS bars */
+  height: 100dvh;
   overflow-x: auto;
   overflow-y: auto;
-  overflow: visible; /* ✅ but allow overflow rendering above footer */                  /* both directions when content overflows */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
   background: transparent;
