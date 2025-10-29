@@ -6,7 +6,8 @@ html, body {
   height: 100%;
   width: 100%;
   background: radial-gradient(circle at 50% 100%, rgba(255,0,150,0.05), #000 85%);
-  overflow: hidden;                 /* scrolling happens in #scroll-container */
+  overflow-x: hidden;  /* ✅ keep horizontal auto-panning clean */
+  overflow-y: visible; /* ✅ prevents button clipping */
   scroll-behavior: smooth;
   font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color: #fff;
@@ -117,14 +118,15 @@ html, body {
 #footer {
   position: fixed;
   left: 0; right: 0;
-  bottom: env(safe-area-inset-bottom, 0px);
+  bottom: 0;
   z-index: 5000;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: .8rem;
-  padding: 0 1rem;
+  padding: .8rem 1rem calc(env(safe-area-inset-bottom, 0px) + .8rem);
+  overflow: visible;
   opacity: 0;                       /* hidden initially */
   pointer-events: none;             /* allow panning underneath */
   transform: translateZ(0);
@@ -141,9 +143,11 @@ html, body {
 
 /* Make children clickable while parent stays pan-transparent */
 #footer * {
-  pointer-events: auto;
   touch-action: manipulation;       /* taps/clicks only; no pan capture */
 }
+
+#footer { pointer-events: none; }
+#footer.visible { pointer-events: auto; }   /* ✅ make whole footer interactive when shown */
 
 /* Group layouts */
 #footer-left { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
@@ -522,3 +526,5 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 
 /* Ensure taps don’t get hijacked by footer when hidden */
 #footer:not(.visible) * { pointer-events: none; }
+
+#footer { overflow: visible; }
