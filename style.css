@@ -28,7 +28,9 @@ html, body {
   position: relative;
   width: 100vw;
   height: 100dvh;                   /* modern viewport unit to avoid iOS bars */
-  overflow: auto;                   /* both directions when content overflows */
+  overflow-x: auto;
+  overflow-y: auto;
+  overflow: visible; /* ✅ but allow overflow rendering above footer */                  /* both directions when content overflows */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
   background: transparent;
