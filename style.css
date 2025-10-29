@@ -490,6 +490,7 @@ svg defs #progressGradient stop:last-child  { stop-color: #ff00aa; }
 /* Landscape: center groups & avoid cutoff */
 @media (orientation: landscape) {
   #footer {
+    padding-top: 0.6rem;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
